@@ -1,5 +1,4 @@
-# 图像分类模型
-
+<img src="https://github.com/ACM40960/project-Chenxi-Li/raw/main/images/densenet121_logo.png" alt="DenseNet121 Logo" width="200"/>
 本项目旨在使用预训练的 DenseNet121 模型对图像进行分类，区分黑熊（black bear）和纽芬兰犬（newfoundland）。
 
 ## 项目简介
