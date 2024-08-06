@@ -1,4 +1,4 @@
-<img src="https://github.com/ACM40960/project-Chenxi-Li/raw/main/images/densenet121_logo.png" alt="DenseNet121 Logo" width="200"/>
+<img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/densenet121_logo_.png" alt="DenseNet121 Logo" width="400" height="300"/>
 本项目旨在使用预训练的 DenseNet121 模型对图像进行分类，区分黑熊（black bear）和纽芬兰犬（newfoundland）。
 
 ## 项目简介
@@ -41,12 +41,12 @@ pip install tensorflow pandas numpy matplotlib scikit-learn seaborn colorama
 
 |               | precision | recall | f1-score | support |
 |---------------|-----------|--------|----------|---------|
-| black bear    | 1.00      | 1.00   | 1.00     | 35      |
-| newfoundland  | 1.00      | 1.00   | 1.00     | 40      |
+| black bear    | 0.98      | 1.00   | 0.99     | 43      |
+| newfoundland  | 1.00      | 0.99   | 0.99     | 75      |
 |               |           |        |          |         |
-| accuracy      |           |        | 1.00     | 75      |
-| macro avg     | 1.00      | 1.00   | 1.00     | 75      |
-| weighted avg  | 1.00      | 1.00   | 1.00     | 75      |
+| accuracy      |           |        | 0.99     | 118     |
+| macro avg     | 0.99      | 0.99   | 0.99     | 118     |
+| weighted avg  | 0.99      | 0.99   | 0.99     | 118     |
 
 
 ## 模型结构
@@ -57,9 +57,10 @@ pip install tensorflow pandas numpy matplotlib scikit-learn seaborn colorama
 
 ## 使用方法
 克隆项目：
+```
 git clone https://github.com/your_username/your_project.git
 cd your_project
-
+```
 安装依赖：
 pip install -r requirements.txt
 
