@@ -15,11 +15,11 @@ pip install tensorflow pandas numpy matplotlib scikit-learn seaborn colorama
 
 ## 数据集说明
 
-将黑熊和纽芬兰犬的图像分别放在 black bear 和 newfoundland 目录下。未见数据集放在 unseen_data 目录下。
+将黑熊和纽芬兰犬的图像分别放在data文件夹的black bear 和 newfoundland 目录下。未见数据集用放在 unseen_data 文件夹下。
 
 ## 模型训练
 
-模型训练的核心步骤包括加载数据、创建数据生成器、构建模型和训练模型。
+模型训练的步骤包括加载数据、创建数据生成器、构建模型和训练模型。
 
 ## 模型评估
 
