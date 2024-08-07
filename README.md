@@ -1,4 +1,4 @@
-# Black Bear vs Newfoundland Image Classification
+# Black Bear vs Newfoundland Dog Image Recognition
 
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/densenet121_logo_.png" alt="DenseNet121 Logo" width="400" height="300"/>
 
