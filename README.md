@@ -7,129 +7,162 @@
 
 This project aims to classify images of black bears and Newfoundland dogs using a deep learning model built on DenseNet121. The project involves data loading, model building, training, evaluation, and visualization of results.
 
-The core algorithm is a transfer learning model based on DenseNet121, and BatchNormalization and Dropout layers are added to it to improve the generalization ability of the model and prevent overfitting.
+### Dataset
+- Data structure
+  - data/Black bear
+  - data/Newfoundland
 
-## 模型结构
+Dataset is split as follows:
+
+| Dataset | proportion |
+| ------- |--------|
+| Train | 0.64    |
+ | Test | 0.16 |
+ | Validation | 0.20   |
+
+### Methodology
+
+In this project, we utilize a transfer learning model based on DenseNet121 for the classification of images into two classes: Black Bear and Newfoundland. The core algorithm leverages the pre-trained DenseNet121 architecture as a feature extractor, combined with additional layers to enhance the model's performance. BatchNormalization and Dropout layers are added to it to improve the generalization ability of the model and prevent overfitting.
+
+#### Model Architecture
 <img src="https://github.com/ACM40960/project-Chenxi-Li/raw/main/images/model_structure.png" alt="Model Structure" width="400" height="600"/>
 
-The model uses the pre-trained DenseNet121 architecture for classifying images of black bears and Newfoundland dogs. It starts with an input layer for images of shape (224, 224, 3), followed by DenseNet121 which outputs features of shape (7, 7, 1024).
 
-A BatchNormalization layer stabilizes and accelerates training, followed by a Dropout layer to prevent overfitting. The output is then flattened into a one-dimensional vector.
 
-A Dense layer with 128 units and ReLU activation processes the flattened features. Another Dropout layer provides additional regularization. The final Dense layer with 2 units and softmax activation outputs the probability distribution for the two classes.
+- The model is built on the pre-trained DenseNet121 architecture, which is used as a feature extractor.
 
-This architecture combines DenseNet121's feature extraction with custom layers to improve stability, prevent overfitting, and ensure effective classification.
+- Additional layers are added on top of DenseNet121:
 
-## Data
+  - BatchNormalization Layer: Normalizes the output to stabilize and accelerate training.
 
-data/black bear: Contains images of black bears.
+  - Dropout Layer: Prevents overfitting by randomly setting a fraction of input units to zero.
 
-data/newfoundland: Contains images of Newfoundland dogs.
+  - Flatten Layer: Converts the feature maps into a one-dimensional vector.
 
-unseen_data: Contains unseen images for model prediction.
+  - Dense Layer (128 units): Fully connected layer with ReLU activation for further processing.
 
-## 模型训练
+  - Dropout Layer: Additional dropout for regularization.
 
-模型训练的步骤包括加载数据、创建数据生成器、构建模型和训练模型。
+  - Output Dense Layer (2 units): Fully connected layer with softmax activation to output the probability distribution for the two classes.
 
-1.加载数据
 
-从指定目录中加载黑熊和纽芬兰犬的图像，并将其分为训练集、验证集和测试集。
+## Model Traning
+
+- Data Loading
+
+Images of black bears and Newfoundland dogs are loaded and split into training, validation, and test sets.
+
 ```python
-# 加载数据并分割为训练集、验证集和测试集
+# Load and split data into training, validation, and test sets
 black_bear_dir = "data/black bear"
 newfoundland_dir = "data/newfoundland"
-# 加载并组合数据
+
 filepaths, labels = load_data(black_bear_dir, 'black bear') + load_data(newfoundland_dir, 'newfoundland')
 df = pd.DataFrame({'filepath': filepaths, 'label': labels})
-# 分割数据集
+
 train_df, test_df = train_test_split(df, test_size=0.2, stratify=df['label'], random_state=42)
 train_df, val_df = train_test_split(train_df, test_size=0.2, stratify=train_df['label'], random_state=42)
 ```
 
-2.创建数据生成器
+- Creating Data Generators
 
-使用 ImageDataGenerator 创建训练、验证和测试数据的生成器，进行数据增强和预处理。
+Use ImageDataGenerator to create data generators for training, validation, and test sets, performing data augmentation and preprocessing.
 ```python
-# 创建数据生成器
+# Create data generators
 train_generator, val_generator, test_generator = create_generators(train_df, val_df, test_df)
-
 ```
-3.构建模型
+- Model Construction
 
-基于预训练的 DenseNet121 模型，构建一个自定义的顺序模型。DenseNet121 作为基础模型，并添加 BatchNormalization 层、Dropout 层和全连接层。
+Construct a custom sequential model based on the pre-trained DenseNet121 model. DenseNet121 is used as the base model, and additional BatchNormalization, Dropout, and Dense layers are added to enhance generalization and prevent overfitting.
 ```
+from tensorflow.keras.applications import DenseNet121
+from tensorflow.keras.layers import Dense, Dropout, BatchNormalization, Flatten
+from tensorflow.keras.models import Sequential
+
+# Load the pre-trained DenseNet121 model without the top layer
 base_model = DenseNet121(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-base_model.trainable = False
-model = build_model(base_model, num_classes=len(train_generator.class_indices))
-```
-4.训练模型
+base_model.trainable = False  # Freeze the base model
 
-使用训练和验证数据生成器训练模型，并使用 EarlyStopping 回调函数防止过拟合。
+# Create a custom model on top of the DenseNet121 base
+model = Sequential([
+    base_model,
+    BatchNormalization(),
+    Dropout(0.25),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dropout(0.25),
+    Dense(2, activation='softmax')  # Output layer with softmax activation for 2 classes
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 ```
+- Model Training
+
+Train the model using the training and validation data generators, and employ an EarlyStopping callback to prevent overfitting.
+```
+from tensorflow.keras.callbacks import EarlyStopping
+
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 history = model.fit(train_generator, validation_data=val_generator, epochs=15, callbacks=[early_stopping])
 ```
 
-## 模型评估
+## Model Evaluation
 The model's performance is evaluated on the validation set, with metrics including loss and accuracy.
 ```
 validation_loss, validation_accuracy = model.evaluate(val_generator)
 print("Validation Loss:", validation_loss)
 print("Validation Accuracy:", validation_accuracy)
-model.save('model/my_model.h5')
 ```
+### Visualization：
+In this project, several visualizations are used to analyze the training process. Below are the performances of the visualizations included in this project:
 
-Visualization：
-
-Training History: Accuracy and loss plots for training and validation sets.
+#### Training History: Accuracy and loss plots for training and validation sets.
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/training_history.png" alt="Model Structure" width="800" height="300"/>
 
-Confusion Matrix: Heatmap to show the confusion matrix.
+#### Confusion Matrix: Heatmap to show the confusion matrix.
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/confusion_matrix.png" alt="Model Structure" width="800" height="500"/>
 
-ROC Curve: ROC curves and AUC scores for each class.
-
+#### ROC Curve: ROC curves and AUC scores for each class.
 
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/roc_curve.png" alt="Model Structure" width="600" height="500"/>
 
 
-分类报告
+#### Classification Report
 
 |               | precision | recall | f1-score | support |
 |---------------|-----------|--------|----------|---------|
-| black bear    | 0.98      | 1.00   | 0.99     | 43      |
-| newfoundland  | 1.00      | 0.99   | 0.99     | 75      |
+| black bear    | 0.98      | 0.98   | 0.98     | 43      |
+| newfoundland  | 0.99      | 0.99   | 0.99     | 75      |
 |               |           |        |          |         |
-| accuracy      |           |        | 0.99     | 118     |
-| macro avg     | 0.99      | 0.99   | 0.99     | 118     |
-| weighted avg  | 0.99      | 0.99   | 0.99     | 118     |
+| accuracy      |           |        | 0.98     | 118     |
+| macro avg     | 0.98      |0.98    | 0.98     | 118     |
+| weighted avg  | 0.98      | 0.98   | 0.98     | 118     |
 
 
 
-## Usage
+## Visualizing Predictions on Unseen Data:
 
-Classifying Unseen Images
-A function is provided to preprocess and classify images from the unseen dataset, displaying the predictions.
+A function is provided to preprocess and recognize images from the unseen dataset, displaying the predictions.
 
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/unseen_data_predictions.png" alt="Model Structure" width="1000" height="700"/>
 
-## 使用方法
-克隆项目：
+## Usage
+
+Clone the repository:
 ```bash
 git clone https://github.com/ACM40960/project-Chenxi-Li.git
 cd project-Chenxi-Li
 ```
-安装依赖：
+Install dependencies:
 ```sh
 pip install tensorflow pandas numpy matplotlib scikit-learn seaborn colorama
 ```
 
-运行代码
-在Jupyter Notebook中，打开 Final Project(pure code).ipynb 文件，并按照顺序运行所有单元格。
+Run the code:
+Open the Final Project(pure code).ipynb file in Jupyter Notebook and run all cells in order.
 
-## 贡献
-欢迎贡献者！如果你有任何改进建议或发现了问题，请提交 issue 或 pull request。
+## Contributing
+Contributions are welcome! If you have any suggestions for improvements or find any issues, please submit an issue or a pull request.
 
-## 许可证
-本项目基于 MIT 许可证进行发布。
+## License
+This project is licensed under the MIT License.
