@@ -5,24 +5,26 @@
 
 ## Introduction
 
-This project aims to classify images of black bears and Newfoundland dogs using a deep learning model built on DenseNet121. The project involves data loading, model building, training, evaluation, and visualization of results.
+This project aims to classify similar images of black bears and Newfoundland dogs using a deep learning model built on DenseNet121 with customer layers. The project involves data loading, data augmentation, model training, evaluation, and visualization of results.
 
 ### Dataset
+The dataset used in this project consists of 215 images of black bears and 371 images of Newfoundland dogs. The images are collected from public image databases, including different
+angles, lighting conditions, and backgrounds.
 - Data structure
   - data/Black bear
   - data/Newfoundland
 
 Dataset is split as follows:
 
-| Dataset | proportion |
-| ------- |--------|
-| Train | 0.64    |
- | Test | 0.16 |
- | Validation | 0.20   |
+| Dataset | proportion | numbers |
+| ------- |--------|--------|
+| Train | 0.64    | 374|
+ | Test | 0.16 |94|
+ | Validation | 0.20   |118|
 
 ### Methodology
 
-In this project, we utilize a transfer learning model based on DenseNet121 for the classification of images into two classes: Black Bear and Newfoundland. The core algorithm leverages the pre-trained DenseNet121 architecture as a feature extractor, combined with additional layers to enhance the model's performance. BatchNormalization and Dropout layers are added to it to improve the generalization ability of the model and prevent overfitting.
+In this project, we utilize a transfer learning model based on DenseNet121 for the classification of images into two classes: Black Bear and Newfoundland. The core algorithm leverages the pre-trained DenseNet121 architecture as a feature extractor, combined with additional layers to enhance the model's performance. Some customer layers and EarlyStopping Callback function are added to it to improve the generalization ability of the model and prevent overfitting.
 
 #### Model Architecture
 <img src="https://github.com/ACM40960/project-Chenxi-Li/raw/main/images/model_structure.png" alt="Model Structure" width="400" height="600"/>
@@ -50,7 +52,7 @@ In this project, we utilize a transfer learning model based on DenseNet121 for t
 
 - Data Loading
 
-Images of black bears and Newfoundland dogs are loaded and split into training, validation, and test sets.
+Images of black bears and Newfoundland dogs are loaded and split into training, validation, and test sets. Stratified sampling is used to keep that the proportion of labels in each subsets is consistent with that in original data.
 
 ```python
 # Load and split data into training, validation, and test sets
@@ -66,7 +68,7 @@ train_df, val_df = train_test_split(train_df, test_size=0.2, stratify=train_df['
 
 - Creating Data Generators
 
-Use ImageDataGenerator to create data generators for training, validation, and test sets, performing data augmentation and preprocessing.
+Use ImageDataGenerator to create data generators for training, validation, and test sets, and images are scaled and normalized.
 ```python
 # Create data generators
 train_generator, val_generator, test_generator = create_generators(train_df, val_df, test_df)
@@ -91,7 +93,7 @@ model = Sequential([
     Flatten(),
     Dense(128, activation='relu'),
     Dropout(0.25),
-    Dense(2, activation='softmax')  # Output layer with softmax activation for 2 classes
+    Dense(2, activation='softmax')  
 ])
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -116,18 +118,26 @@ print("Validation Accuracy:", validation_accuracy)
 ### Visualization：
 In this project, several visualizations are used to analyze the training process. Below are the performances of the visualizations included in this project:
 
+
 #### Training History: Accuracy and loss plots for training and validation sets.
+The training and validation accuracy increase steadily and plateau around epoch 8, reaching
+nearly 100%. The training and validation loss decrease significantly and stabilize after epoch
+6, indicating a well-fitting model with minimal overfitting.
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/training_history.png" alt="Model Structure" width="800" height="300"/>
 
 #### Confusion Matrix: Heatmap to show the confusion matrix.
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/confusion_matrix.png" alt="Model Structure" width="800" height="500"/>
 
 #### ROC Curve: ROC curves and AUC scores for each class.
-
+The ROC curve demonstrates the model’s ability to distinguish between classes, with an area
+under the curve (AUC) of 1.00, indicating perfect performance.
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/roc_curve.png" alt="Model Structure" width="600" height="500"/>
 
 
 #### Classification Report
+The model achieved high performance metrics with targets of 0.98 for black bears and 0.99
+for Newfoundland dogs.The overall accuracy of the model is 0.98, demonstrating its effectiveness in distinguishing
+between the two classes.
 
 |               | precision | recall | f1-score | support |
 |---------------|-----------|--------|----------|---------|
