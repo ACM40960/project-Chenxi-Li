@@ -1,4 +1,9 @@
 # Black Bear vs Newfoundland Dog Image Recognition
+![Python](https://img.shields.io/badge/python-v3.10-blue.svg)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-TensorFlow-orange.svg)
+
 
 <img src="https://github.com/ACM40960/project-Chenxi-Li/blob/main/images/densenet121_logo_.png" alt="DenseNet121 Logo" width="400" height="300"/>
 
@@ -31,7 +36,7 @@ In this project, we utilize a transfer learning model based on DenseNet121 for t
 
 
 
-- The model is built on the pre-trained DenseNet121 architecture, which is used as a feature extractor.
+- All layers in the DenseNet121 model are frozen to take advantage of the features extracted from the pre-trained model without updating their weights. Custom layers are added on top of the base model for this specific classification task.
 
 - Additional layers are added on top of DenseNet121:
 
@@ -50,7 +55,7 @@ In this project, we utilize a transfer learning model based on DenseNet121 for t
 
 ## Model Traning
 
-- Data Loading
+- Data Loading and Spliting
 
 Images of black bears and Newfoundland dogs are loaded and split into training, validation, and test sets. Stratified sampling is used to keep that the proportion of labels in each subsets is consistent with that in original data.
 
