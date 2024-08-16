@@ -68,7 +68,8 @@ filepaths, labels = load_data(black_bear_dir, 'black bear') + load_data(newfound
 df = pd.DataFrame({'filepath': filepaths, 'label': labels})
 
 train_df, test_df = train_test_split(df, test_size=0.2, stratify=df['label'], random_state=42)
-train_df, val_df = train_test_split(train_df, test_size=0.2, stratify=train_df['label'], random_state=42)
+train_df, val_df = train_test_split(train_df, test_size=0.2,
+stratify=train_df['label'], random_state=42)
 ```
 
 - Creating Data Generators
@@ -110,7 +111,8 @@ Train the model using the training and validation data generators, and employ an
 from tensorflow.keras.callbacks import EarlyStopping
 
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-history = model.fit(train_generator, validation_data=val_generator, epochs=15, callbacks=[early_stopping])
+history = model.fit(train_generator, validation_data=val_generator, epochs=15,
+callbacks=[early_stopping])
 ```
 
 ## Model Evaluation
