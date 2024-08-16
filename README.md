@@ -119,8 +119,6 @@ callbacks=[early_stopping])
 The model's performance is evaluated on the validation set, with metrics including loss and accuracy.
 ```
 validation_loss, validation_accuracy = model.evaluate(val_generator)
-print("Validation Loss:", validation_loss)
-print("Validation Accuracy:", validation_accuracy)
 ```
 ### Visualization：
 In this project, several visualizations are used to analyze the training process. Below are the performances of the visualizations included in this project:
