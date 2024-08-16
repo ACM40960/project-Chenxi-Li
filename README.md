@@ -27,7 +27,7 @@ Dataset is split as follows:
 In this project, we utilize a transfer learning model based on DenseNet121 for the classification of images into two classes: Black Bear and Newfoundland. The core algorithm leverages the pre-trained DenseNet121 architecture as a feature extractor, combined with additional layers to enhance the model's performance. Some customer layers and EarlyStopping Callback function are added to it to improve the generalization ability of the model and prevent overfitting.
 
 #### Model Architecture
-<img src="https://github.com/ACM40960/project-Chenxi-Li/raw/main/images/model_structure.png" alt="Model Structure" width="400" height="600"/>
+<img src="images/Structure of Model.png" alt="Model Structure" width="400" height="600"/>
 
 
 
