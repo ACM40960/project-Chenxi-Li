@@ -180,3 +180,10 @@ Contributions are welcome! If you have any suggestions for improvements or find 
 
 ## License
 This project is licensed under the MIT License.
+
+## References
+Datasets: 
+https://www.kaggle.com/datasets/hoturam/bear-dataset
+https://www.kaggle.com/datasets/imbikramsaha/dog-breeds
+
+Muhammad Abdullah. (2024). Hotdog or Not: The Ultimate Classifier.
