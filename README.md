@@ -14,7 +14,7 @@ This project aims to classify similar images of black bears and Newfoundland dog
 
 ### Dataset
 The dataset used in this project consists of 215 images of black bears and 371 images of Newfoundland dogs. The images are collected from public image databases, including different
-angles, lighting conditions, and backgrounds.
+angles, lighting conditions, and backgrounds. Stratified sampling is used to keep that the proportion of labels in each subsets is consistent with that in original data.
 - Data structure
   - data/Black bear
   - data/Newfoundland
@@ -60,13 +60,7 @@ In this project, we utilize a transfer learning model based on DenseNet121 for t
 Images of black bears and Newfoundland dogs are loaded and split into training, validation, and test sets. Stratified sampling is used to keep that the proportion of labels in each subsets is consistent with that in original data.
 
 ```python
-# Load and split data into training, validation, and test sets
-black_bear_dir = "data/black bear"
-newfoundland_dir = "data/newfoundland"
-
-filepaths, labels = load_data(black_bear_dir, 'black bear') + load_data(newfoundland_dir, 'newfoundland')
-df = pd.DataFrame({'filepath': filepaths, 'label': labels})
-
+# Split data 
 train_df, test_df = train_test_split(df, test_size=0.2, stratify=df['label'], random_state=42)
 train_df, val_df = train_test_split(train_df, test_size=0.2,
 stratify=train_df['label'], random_state=42)
